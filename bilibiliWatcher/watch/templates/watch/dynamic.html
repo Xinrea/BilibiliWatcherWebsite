@@ -2,7 +2,7 @@
 {% block title %}{{up.upname}}{% endblock %}
 {% block content %}
 <ul class="list-group">
-        <div class="list-group-item">{{up.upname}}</div>
+        <div class="list-group-item"><h4>{{up.upname}} <span class="label label-default">UID: {{up.upid}}</span></h4></div>
         {% for i in cards %}
         <ul class="list-group">
                 <a class="list-group-item">{{i.title}} <span class="label label-primary">Time: {{i.ptime}}</span></a>

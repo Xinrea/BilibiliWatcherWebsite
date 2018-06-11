@@ -1,0 +1,13 @@
+{% extends 'watch/home.html' %}
+{% block title %}{{up.upname}}{% endblock %}
+{% block content %}
+<ul class="list-group">
+        <div class="list-group-item">{{up.upname}}</div>
+        {% for i in cards %}
+        <ul class="list-group">
+                <a class="list-group-item">{{i.title}} <span class="label label-primary">Time: {{i.ptime}}</span></a>
+                <a class="list-group-item" href="https://t.bilibili.com/{{i.cardid}}">{{i.content}}</a>
+        </ul>
+        {% endfor %}
+</ul>
+{% endblock %}

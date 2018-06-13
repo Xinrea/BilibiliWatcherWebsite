@@ -21,7 +21,7 @@
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/watch/login">Login</a></li>
+            <li><a href="/watch/{% if usern %}user/{{usern}}{% else %}login{% endif %}">{% if usern %}{{usern}}{% else %}Login{% endif %}</a></li>
         </ul>
     </div>
     </div>

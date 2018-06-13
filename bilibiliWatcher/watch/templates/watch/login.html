@@ -1,0 +1,33 @@
+{% extends 'watch/home.html' %}
+{% block title %}账号登录{% endblock %}
+{% block content %}
+<div class="alert alert-warning">
+    <a href="#" class="close" data-dismiss="alert">
+        &times;
+    </a>
+    <strong>注意！</strong>暂时不支持注册。
+</div>
+<div class="panel panel-info" style="width:40%;margin:auto">
+        <div class="panel-heading">
+          <h3 class="panel-title">登录账号</h3>
+        </div>
+        <div class="panel-body" style="width:80%;margin-left:auto;margin-right:auto">
+            <form class="bs-example bs-example-form" role="form">
+                <div class="input-group">
+                        <span class="input-group-addon">账号</span>
+                    <input type="text" class="form-control" placeholder="Account">
+                </div>
+                <br>
+                <div class="input-group">
+                    <span class="input-group-addon">密码</span>
+                    <input type="password" class="form-control" placeholder="Password">
+                </div>
+                <br>
+                <div style="margin-left: auto">
+                    <button type="button" class="btn btn-default">登录</button>
+                </div>
+                
+            </form>
+        </div>
+</div>
+{% endblock %}

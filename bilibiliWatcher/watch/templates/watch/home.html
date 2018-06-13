@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
     <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>  
 </head>
 <body>
     {% include 'watch/nav.html' %}
     {% block content %}
     {% for i in upinfos %}
     <ul class="list-group">
-        <a class="list-group-item" href="{{i.upid}}"><h4>{{i.upname}} <span class="label label-default">UID: {{i.upid}}</span><span class="label label-primary">Start-time: {{i.wtime}}</span></h4></a>
+        <a class="list-group-item" href="{{i.upid}}"><h4>{{i.upname}} <span class="label label-default">UID: {{i.upid}}</span> <span class="label label-primary">Start-Time: {{i.wtime}}</span></h4></a>
         <a class="list-group-item">{{i.des}}</a>
     </ul>
     {% endfor %}

@@ -7,7 +7,7 @@ from django.db.models import Count
 def index(request):
     upinfos = Upinfo.objects.all()
     cards = Cards.objects.all()
-    tag = True
+    tag = False
     v = request.session.get('name')
     if v:
         usern = v
@@ -103,4 +103,4 @@ def login(request):
             return render(request,'watch/login.html',{'error':True})
 
 def manage(request,username):
-    return HttpResponse(username)
+    return render(request,'watch/manage.html')

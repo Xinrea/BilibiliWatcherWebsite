@@ -11,4 +11,5 @@ urlpatterns = [
     path('text/',views.dynamic_text,name='dynamic_text'),
     path('statistic/',views.statistic,name='statistic'),
     path('login/',views.login,name='login'),
+    path('logout/',views.logout,name='logout'),
 ]

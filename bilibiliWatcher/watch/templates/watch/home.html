@@ -14,7 +14,7 @@
     {% include 'watch/nav.html' %}
     {% block content %}
     {% for i in upinfos %}
-    <ul class="list-group">
+    <ul class="list-group" style="margin:30px">
         <a class="list-group-item" href="{{i.upid}}"><h4>{{i.upname}} <span class="label label-default">UID: {{i.upid}}</span> <span class="label label-primary">Start-Time: {{i.wtime}}</span></h4></a>
         <a class="list-group-item">{{i.des}}</a>
     </ul>

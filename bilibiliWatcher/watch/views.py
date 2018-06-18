@@ -98,9 +98,20 @@ def login(request):
         account = Accounts.objects.filter(uname=username,passwd=password).first()
         if account:
             request.session['name']=account.uname
+            request.session['uid']=account.uid
             return redirect('/watch/')
         else:
             return render(request,'watch/login.html',{'error':True})
 
 def manage(request,username):
-    return render(request,'watch/manage.html')
+    v = request.session.get('name')
+    usrid = request.session.get('uid')
+    if v:
+        usern = v
+        return render(request,'watch/manage.html',{'usern':usern,'usrid':usrid})
+    else :
+        return redirect('/watch/login')
+
+def logout(request):
+    del request.session['name']
+    return redirect('/watch/login')

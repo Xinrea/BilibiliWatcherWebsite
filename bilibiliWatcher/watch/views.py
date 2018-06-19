@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from watch.models import Cards,Upinfo,Accounts
+from watch.models import Cards,Upinfo,Accounts,Watch
 from django.db.models import Count
+from django.contrib.auth.hashers import make_password, check_password
 
 # Create your views here.
 def index(request):
@@ -85,33 +86,79 @@ def statistic(request):
     
 
 def login(request):
+    register = False
     if request.method == 'GET':
         v = request.session.get('name')
         if v:
             usern = v
-            return render(request,'watch/login.html',{'usern':usern})
+            return render(request,'watch/login.html',{'usern':usern,'register':register})
         else:
-            return render(request,'watch/login.html')
+            return render(request,'watch/login.html',{'register':register})
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('passwd')
-        account = Accounts.objects.filter(uname=username,passwd=password).first()
-        if account:
+        account = Accounts.objects.filter(uname=username).first()
+        if check_password(password,account.passwd):
             request.session['name']=account.uname
             request.session['uid']=account.uid
             return redirect('/watch/')
         else:
-            return render(request,'watch/login.html',{'error':True})
+            return render(request,'watch/login.html',{'error':True,'register':register})
+
+def register(request):
+    register = True
+    if request.method == 'GET':
+        v = request.session.get('name')
+        if v:
+            usern = v
+            return render(request,'watch/login.html',{'usern':usern,'register':register})
+        else:
+            return render(request,'watch/login.html',{'register':register})
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('passwd')
+        new_account = Accounts(uname=username,passwd=make_password(password, None, 'pbkdf2_sha256'))
+        new_account.save()
+        request.session['name']=new_account.uname
+        request.session['uid']=new_account.uid
+        return redirect('/watch/')
 
 def manage(request,username):
-    v = request.session.get('name')
-    usrid = request.session.get('uid')
-    if v:
-        usern = v
-        return render(request,'watch/manage.html',{'usern':usern,'usrid':usrid})
-    else :
-        return redirect('/watch/login')
+    if request.method == 'GET':
+        v = request.session.get('name')
+        usrid = request.session.get('uid')
+        user = Accounts.objects.filter(uid=usrid).first()
+        follow_list = Watch.objects.filter(uid=usrid)
+        cardlist = Cards.objects.all()
+        uplist = []
+        for i in follow_list:
+            uplist.append(i.upid)
+        if v:
+            usern = v
+            return render(request,'watch/manage.html',{'usern':usern,'usrid':usrid,'follow':follow_list,'cards':cardlist,'uplist':uplist})
+        else :
+            return redirect('/watch/login')
+    if request.method == 'POST':
+        target = request.POST.get('upid')
+        new_up = Upinfo.objects.filter(upid=target).first()
+        if new_up == None:
+            new_up = Upinfo(upid=target)
+            new_up.save()
+        usrid = request.session.get('uid')
+        usrname = request.session.get('name')
+        user = Accounts.objects.filter(uid=usrid).first()
+        new_watch = Watch(uid=user,upid=new_up)
+        new_watch.save()
+        return redirect('/watch/user/'+usrname)
 
 def logout(request):
     del request.session['name']
     return redirect('/watch/login')
+
+def delete(request,id):
+    v = request.session.get('name')
+    usrid = request.session.get('uid')
+    delete_obj = Watch.objects.filter(uid=usrid,upid=id)
+    if delete_obj:
+        delete_obj.delete()
+    return redirect('/watch/user/'+v)

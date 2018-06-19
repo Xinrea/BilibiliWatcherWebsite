@@ -1,7 +1,7 @@
 {% extends 'watch/home.html' %}
 {% block title %}账号管理{% endblock %}
 {% block content %}
-<div class="panel panel-default" style="margin:30px;">
+<div class="panel panel-default" style="width:30%;margin:50px;float:left">
         <div class="panel-heading">
             <h3>{{usern}}  <a href='/watch/logout' style="float: right;margin-right: 10px;"><button type="button" class="btn btn-danger">Logout</button></a></h3>
             <h4>(UID: {{usrid}})</h4>
@@ -10,10 +10,30 @@
         <div class="panel-body">
             <ul class="list-group">
                 <a class="list-group-item active">关注列表</a>
-                <a class="list-group-item">wtf1 <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='/watch/delete/1'" style="float: right;">Delete</button></a>
-                <a class="list-group-item">wtf2 <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='/watch/delete/1'" style="float: right;">Delete</button></a>
-
+                {% for i in follow %}
+                <a class="list-group-item">{{i.upid.upname}} (UPID: {{i.upid.upid}}) <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='/watch/delete/{{i.upid.upid}}'" style="float: right;">Delete</button></a>
+                {% endfor %}
             </ul>
+            <form class="bs-example bs-example-form" role="form" method="POST">
+                {% csrf_token %}
+                <input type="number" class="form-control" placeholder="New UPID" name="upid" style="float: left;width: 60%;">
+                <input type="submit" class="btn btn-default" value="Add" style="float: right;">
+            </form>
         </div>
+</div>
+<div class="panel panel-default" style="width:50%;margin:50px;float:right">
+    <div class="panel-heading">
+        <h3>关注的动态</h3>
+    </div>
+    <div class="panel-body">
+        {% for i in cards %}
+        {% if i.upid in uplist %}
+        <ul class="list-group">
+            <a class="list-group-item">{% if i.title == 'forward' %}转发{% elif i.title == 'dynam' %}普通动态{% else %}{{i.title}}{% endif %} <span class="label label-primary">Time: {{i.ptime}}</span></a>
+            <a class="list-group-item" href="https://t.bilibili.com/{{i.cardid}}">{{i.content}}</a>
+        </ul>
+        {% endif %}
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

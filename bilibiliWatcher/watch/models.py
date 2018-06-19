@@ -4,8 +4,8 @@ from django.db import models
 class Accounts(models.Model):
     uid = models.AutoField(primary_key=True)
     uname = models.CharField(max_length=30)
-    passwd = models.CharField(max_length=255)
-    rtime = models.DateField()
+    passwd = models.CharField(max_length=1024)
+    rtime = models.DateField(auto_now_add=True)
 
     class Meta:
         managed = False
@@ -28,7 +28,7 @@ class Upinfo(models.Model):
     upid = models.IntegerField(primary_key=True)
     upname = models.CharField(max_length=64)
     des = models.CharField(max_length=512, blank=True, null=True)
-    wtime = models.DateField()
+    wtime = models.DateField(auto_now_add=True)
 
     class Meta:
         managed = False
@@ -46,9 +46,10 @@ class Usrinfo(models.Model):
 
 
 class Watch(models.Model):
-    uid = models.ForeignKey(Accounts, models.DO_NOTHING, db_column='uid', primary_key=True)
-    upid = models.ForeignKey(Upinfo, models.DO_NOTHING, db_column='upid', blank=True, null=True)
-    uwtime = models.DateField(blank=True, null=True)
+    wid = models.AutoField(primary_key=True)
+    uid = models.ForeignKey(Accounts, models.DO_NOTHING, db_column='uid')
+    upid = models.ForeignKey(Upinfo, models.DO_NOTHING, db_column='upid')
+    uwtime = models.DateField(auto_now_add=True)
 
     class Meta:
         managed = False

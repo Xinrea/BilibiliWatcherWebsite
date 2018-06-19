@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from watch.models import Cards,Upinfo,Accounts,Watch
-from django.db.models import Count
+from django.db.models import Count,DateTimeField
 from django.contrib.auth.hashers import make_password, check_password
 
 # Create your views here.
@@ -73,16 +73,21 @@ def statistic(request):
     ups = Upinfo.objects.all()
     upnames = []
     data = []
+    tdata = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     for i in ups:
         upnames.append(i.upname)
         data.append(Cards.objects.filter(upid=i.upid).aggregate(Count('cardid'))['cardid__count'])
-
+    allcards = Cards.objects.all()
+    for k in allcards:
+        t = k.ptime.hour
+        tdata[t%24]+=1
+            
     v = request.session.get('name')
     if v:
         usern = v
-        return render(request,'watch/statistic.html',{'upnames':upnames,'data':data,'usern':usern})
+        return render(request,'watch/statistic.html',{'upnames':upnames,'data':data,'tdata':tdata,'usern':usern})
     else:
-        return render(request,'watch/statistic.html',{'upnames':upnames,'data':data})
+        return render(request,'watch/statistic.html',{'upnames':upnames,'data':data,'tdata':tdata})
     
 
 def login(request):
